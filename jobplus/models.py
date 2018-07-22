@@ -87,3 +87,4 @@ class JobWanted(db.Model):
 
     def __repr__(self):
         return "<JobWanted %r>" % self.id
+1
