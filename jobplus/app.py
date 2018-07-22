@@ -1,4 +1,4 @@
-from flask import flask
+from flask import Flask
 from flask_migrate import Migrate
 from jobplus.config import configs
 from jobplus.models import db

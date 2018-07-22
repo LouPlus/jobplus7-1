@@ -1,5 +1,5 @@
 from flask import Blueprint
 
 
-jobs = ('jobs', __name__, url_prefix='/jobs')
+jobs = Blueprint('jobs', __name__, url_prefix='/jobs')
 

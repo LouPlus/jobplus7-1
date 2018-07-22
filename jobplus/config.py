@@ -8,8 +8,7 @@ class BaseConfig(object):
 class DevelopmentConfig(BaseConfig):
     DEBUG = True
     #设置数据库utf8编码,在数据库里新建jobplus数据库
-    SQLALCHEMY_DATABASE_URI =
-    'mysql+mysqldb://root@localhost:3306/jobplus?charset=utf8'
+    SQLALCHEMY_DATABASE_URI = ('mysql+mysqldb://root@localhost:3306/jobplus?charset=utf8')
 
 
 class ProductionConfig(BaseConfig):
