@@ -1,0 +1,45 @@
+{% extends 'base.html'%}
+{% from "macros.html" import render_paginayion %}
+
+{% block body %}
+<div class="container-fluid header">
+<div class="jumbotron">
+  <div class="container">
+    <h1>JOBPLUS</h1>
+    <p></p>
+   </div>
+  </div>
+ </div>
+ 
+ <div class="container">
+ <ul class="nav-tabs list-title">
+  <li role="presentation" class="active">
+  <a href="#"></a>
+  </li>
+  </ul>
+  
+		
+  <div class="table">
+      <thead>
+          <tr>
+          <th>ID</th>
+          <th>职业</th>
+          <th>公司</th>
+          <th>薪资</th>
+      </tr>
+      <tbody>
+      {% for job in pagination.items %}
+       <tr>
+           <td>{{ job.id }}</td>
+           <td><a href="#">{{ job.name }}</a></td>
+           <td><a href="#">{{ job. }}</a></td>
+           <td>{{ job. }}</td>
+       </tr>
+       {% endfor %}
+       </tbody>
+		
+ <p class="list-more">
+   <a href="#", class="btn btn-success btn-lg list-more-btn">查看更多</a>
+   </p>
+   
+ {% endblock %}
