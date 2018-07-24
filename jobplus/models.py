@@ -1,12 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
-
+from flask_login import UserMixin
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
 
 # 用户
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "user"  # 用户表
     ROLE_USER = 10  # 一般用户
     ROLE_STAFF = 20  # 企业用户
@@ -14,14 +15,30 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # 编号
     name = db.Column(db.String(100), unique=True)  # 会员名
     email = db.Column(db.String(100))  # 邮箱
-    password = db.Column(db.String(100))  # 密码
-    db.Column(db.SmallInteger, default=ROLE_USER)  # 角色
+    _password = db.Column('password',db.String(100))  # 密码
+    role = db.Column(db.SmallInteger, default=ROLE_USER)  # 角色
     addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)  # 注册时间
-    user_company_info = db.relationship('company', backref='user')  # 企业信息外键关系
-    user_user_info = db.relationship('personal', backref='user')  # 个人用户信息外键关系
+    user_company_info = db.relationship('Company', backref='user')  # 企业信息外键关系
+    user_user_info = db.relationship('Personal', backref='user')  # 个人用户信息外键关系
 
     def __repr__(self):
         return "<User %r>" % self.name
+
+    #用户密码hash生成和检验
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, orig_password):
+        self._password = generate_password_hash(orig_password)
+
+
+    def check_password(self, password):
+        return check_password_hash(self._password, password)
+
+
+        
 
 
 # 个人用户
@@ -33,7 +50,7 @@ class Personal(db.Model):
     phone = db.Column(db.String(11))  # 用户电话
     jobyear = db.Column(db.Integer)  # 工作年限
     resume = db.Column(db.String(255))  # 简历
-    personal_jobwanted = db.relationship('jobwanted', backref='personal')
+    personal_jobwanted = db.relationship('JobWanted', backref='personal')
 
     def __repr__(self):
         return "<Personal %r>" % self.name
@@ -49,7 +66,7 @@ class Company(db.Model):
     phone = db.Column(db.String(11))  # 公司电话
     logo = db.Column(db.String(255))  # 公司logo
     summary = db.Column(db.Text)  # 公司简介
-    company_job = db.relationship('job', backref='company')  # 工作外键关系
+    company_job = db.relationship('Job', backref='company')  # 工作外键关系
 
     def __repr__(self):
         return "<Company %r>" % self.name
@@ -69,7 +86,7 @@ class Job(db.Model):
     education = db.Column(db.String(20))  # 工作学历要求
     job_describe = db.Column(db.Text)
     addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)  # 创建工作时间
-    job_JobWanted = db.relationship('jobwanted', backref='job')
+    job_JobWanted = db.relationship('JobWanted', backref='job')
 
     def __repr__(self):
         return "<Job %r>" % self.id
