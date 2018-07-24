@@ -18,55 +18,24 @@
   </li>
   </ul>
   
-<div class="job-list">
-    <div class="col-sm-6 col-md-4">
-	    <div class="job-box">
-	    {% for    in   %}
-		<div class="caption">
-	    <a href="#" >
 		
-	    </div>
-		
-		<div class="media">
-		
-		</div>
-		</a>
-		{% endblock %}
-		
-	   
-	</div>
-</div>	
-		
-		
-		
- <p class="list-more">
-   <a href="#", class="btn btn-success btn-lg list-more-btn">查看更多</a>
-   </p>
-   
-    <div class="container">
- <ul class="nav-tabs list-title">
-  <li role="presentation" class="active">
-  <a href="#"></a>
-  </li>
-  </ul>
-  
-<div class="job-list">
-    <div class="col-sm-6 col-md-4">
-	    <div class="job-box">
-	    {% for    in   %}
-	    <a href="#" >
-		
-	    <div class="caption">
-		
-		
-		</div>
-		{% endblock %}
-		</a>
-	   </div>
-	</div>
-</div>	
-		
-		
+  <div class="table">
+      <thead>
+          <tr>
+          <th>ID</th>
+          <th>职业</th>
+          <th>公司</th>
+          <th>薪资</th>
+      </tr>
+      <tbody>
+      {% for job in pagination.items %}
+       <tr>
+           <td>{{ job.id }}<img src="">{{ }}</td>
+           <td><a href="#">{{ }}</a></td>
+           <td><a href="#">{{}}</a></td>
+           <td><a href="#">{{}}</a></td>
+       </tr>
+       </tbody>
 		
  <p class="list-more">
    <a href="#", class="btn btn-success btn-lg list-more-btn">查看更多</a>
