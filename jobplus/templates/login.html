@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% from "macros.html" import render_form %}
 
-{% block title %}Login{% endblockk %}
+{% block title %}Login{% endblock%}
 
 {% block body %}
+<div class='contanier', style='width:250px;margin-left:30%'>
   <div class="form">
     <h2>登录</h2>
     {{ render_form(form, url_for('front.login')) }}
   </div>
+</div>
 {% endblock %}
