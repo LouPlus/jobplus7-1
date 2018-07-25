@@ -5,9 +5,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
+class Base(db.Model):
+    __abstract__ = True
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.Datetime,
+                        default=datetime.utcnow,
+                        onupdate=datetime.utcnow)
+
 
 # 用户
-class User(db.Model, UserMixin):
+class User(Base, UserMixin):
     __tablename__ = "user"  # 用户表
     ROLE_USER = 10  # 一般用户
     ROLE_STAFF = 20  # 企业用户
@@ -42,7 +49,7 @@ class User(db.Model, UserMixin):
 
 
 # 个人用户
-class Personal(db.Model):
+class Personal(Base):
     __tablename__ = "personal"  # 个人用户信息表
     id = db.Column(db.Integer, primary_key=True)  # 编号
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # 所属会员
@@ -57,7 +64,7 @@ class Personal(db.Model):
 
 
 # 企业用户
-class Company(db.Model):
+class Company(Base):
     __tablename__ = "company"  # 公司信息表
     id = db.Column(db.Integer, primary_key=True)  # 编号
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # 所属会员
@@ -66,6 +73,8 @@ class Company(db.Model):
     phone = db.Column(db.String(11))  # 公司电话
     logo = db.Column(db.String(255))  # 公司logo
     summary = db.Column(db.Text)  # 公司简介
+    field = db.Column(db.String(64)) # 公司所属领域
+    financing = db.Column(db.String(64)) # 融资情况
     company_job = db.relationship('Job', backref='company')  # 工作外键关系
 
     def __repr__(self):
@@ -73,7 +82,7 @@ class Company(db.Model):
 
 
 # 工作
-class Job(db.Model):
+class Job(Base):
     __tablename__ = "job"  # 工作表
     id = db.Column(db.Integer, primary_key=True)  # 编号
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'))  # 所属企业
@@ -84,7 +93,7 @@ class Job(db.Model):
     label = db.Column(db.String(255))  # 职位标签
     jobyear = db.Column(db.String(20))  # 工作年限要求
     education = db.Column(db.String(20))  # 工作学历要求
-    job_describe = db.Column(db.Text)
+    description = db.Column(db.Text)
     addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)  # 创建工作时间
     job_JobWanted = db.relationship('JobWanted', backref='job')
 
@@ -93,7 +102,7 @@ class Job(db.Model):
 
 
 # 求职
-class JobWanted(db.Model):
+class JobWanted():
     __tablename__ = 'jobwanted'  # 求职表
     id = db.Column(db.Integer, primary_key=True)  # 编号
     personal_id = db.Column(db.Integer, db.ForeignKey('personal.id'))  # 所属个人用户
