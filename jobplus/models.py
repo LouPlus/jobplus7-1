@@ -102,7 +102,7 @@ class Job(Base):
 
 
 # 求职
-class JobWanted():
+class JobWanted(Base):
     __tablename__ = 'jobwanted'  # 求职表
     id = db.Column(db.Integer, primary_key=True)  # 编号
     personal_id = db.Column(db.Integer, db.ForeignKey('personal.id'))  # 所属个人用户
