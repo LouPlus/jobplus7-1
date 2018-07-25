@@ -1,1 +1,6 @@
-flask flask-sqlalchemy mysqlclient flask-migrate flask-wtf flask-login
+flask
+flask-sqlalchemy
+mysqlclient
+flask-migrate
+flask-wtf
+flask-login
