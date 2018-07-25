@@ -1,0 +1,95 @@
+{% extends 'base.html'%}
+
+{%block head_css%}
+{{super()}}
+<style>
+a,
+a:hover,
+a:visited {
+text-decoration:none
+}
+.hr0{
+height:1px;
+border:none;
+border-top:1px solid #1E90FF;
+} 
+.jobbox {
+    display: block;
+    width: 90%;
+    height: 180px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: #ddd;
+    padding: 13px;
+    margin-bottom: 15px;
+}
+.btn-more {
+text-align: center;
+}
+</style>
+{%endblock %}
+{%block body%}
+<div class='jumbotron'>
+    <h1>JOBPLUS</h1>
+    <p>领先的互联网求职，招聘平台</p>
+</div>
+<div class='cotanier'>
+    <ul class='nav nav-tabs'>
+        <li>最新职位</li>
+    </ul>
+    <div class='row'>
+        {% for job in jobs.items %}
+        <div class='col-sm-6 col-md-3'>
+            <div class='jobbox'> 
+                <a href='#'>
+                    <b>{{ job.name}}</b>
+                    <span>[{{ job.addtime }}]</span>
+                    <p>{{job.jobyear}}-{{ job.education}}</p>
+                    <span class='label label-default'>{{ job.label}}</span>
+                    <hr class='hr0'/>
+                </a>        
+                    <div class='media'>
+                        <div class='media-left'>
+                        <a href='#'>
+                            <img class='media-object' src='?' width='40' height='40' alt=''></a>
+                        </div>
+                        <div class='media-body'>
+                            <a href='#'>
+                                <h5 class='media-heading'>{{company_name }}</h5>
+                            </a>
+                            <span>公司地址</span>
+                        </div> 
+                    </div>
+                </div>
+        </div>
+        {%endfor%}
+    </div>
+        <div class='btn-more'>
+        <a href='' class='btn btn-success btn-lg'>查看更多</a>
+        </div>
+    <ul class='nav nav-tabs'>
+        <li>最新公司</li>
+    </ul>
+    <div class='row'>
+        {% for company in companies.items %}
+        <div class='col-xs-6 col-md-3'>
+            <div class='jobbox'>
+            <a href='?'>
+                <div style='width:60%;height:60px;positon:relative'>
+                <img src='..' alt='..'>
+            </div>
+            <h5>{{ company.name}}</h5>
+                    <hr class='hr0'>
+                    <p>在招职位</p>
+            </a>
+        </div>
+        </div>
+    {%endfor%}
+    </div>
+        <div class='btn-more'>
+        <a href='' class='btn btn-success btn-lg'>查看更多</a>
+    </div>
+</div>
+{% endblock%}
+

@@ -4,3 +4,4 @@
 * [广夏](https://github.com/luolingyu)
 * [快乐Q](https://github.com/hongrentang)
 * [ZYONG](https://github.com/zyede)
+* [用笨方法写三遍](https://github.com/enjoyphen)
