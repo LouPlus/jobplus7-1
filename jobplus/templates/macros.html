@@ -1,5 +1,5 @@
 {% macro render_form(form, url) %}
-<form method="POST" action="{{ url }}">
+<form method="POST" action="{{ url }}" enctype='multipart/form-data'>
   {{ form.csrf_token }}
   {% for field in form %}
     {% if field.type == 'CSRFTokenField' %}
