@@ -2,8 +2,9 @@
 {% from "macros.html" import render_form %}
 
 {% block title %}User Register{% endblockk %}
-<div class='contanier', style='width:250px;margin-left:30%'>
+
 {% block body %}
+<div class='contanier', style='width:250px;margin-left:30%'>
   <div class="form">
     <h2>用户注册</h2>
     {{ render_form(form, url_for('front.register_user')) }}
