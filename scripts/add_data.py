@@ -23,7 +23,7 @@ def iter_user():
 
         
 #生成公司和个人信息,文件路径暂时未生成，logo,简历        
-def iter_personal():
+def iter_user():
     for user in User.query:
         print('user.role',user.role)
         if user.role == 10:
@@ -42,6 +42,7 @@ def iter_personal():
                     name=name,
                     #name=Unicode()+f.company(),
                     address=f.address(),
+                    url='https://www.baidu.com'
                     phone=f.phone_number(),
                     summary=f.sentence(),
 
@@ -90,6 +91,4 @@ def run():
     except Exception as e:
         print(e)
         db.session.rollback()
-
-
 
