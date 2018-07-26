@@ -11,7 +11,6 @@ def Unicode():
 
 #生成user
 def iter_user():
-
     for i in range(20):
         yield User(
                 name=str(f.random_int())+f.user_name(),
@@ -45,7 +44,6 @@ def iter_user():
                     url='https://www.baidu.com'
                     phone=f.phone_number(),
                     summary=f.sentence(),
-
                     field=f.random_element(elements=('医药', '互联网', '金融')),
                     financing=f.random_element(elements=('A轮','B轮','C轮','天使轮')),
                     )
@@ -78,9 +76,9 @@ def iter_jobwanted():
                             state=f.random_element(elements=(1,2,3))
                             )
 def run():
-    for user in iter_user():
+    for user in iter_personal():
         db.session.add(user)
-    for company in iter_personal():
+    for company in iter_user():
         db.session.add(company)
     for job in iter_job():
         db.session.add(job)
