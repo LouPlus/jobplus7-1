@@ -27,7 +27,6 @@ class User(Base, UserMixin):
     user_company_info = db.relationship('Company', backref='user', uselist=False)  # 企业信息外键关系
     user_user_info = db.relationship('Personal', backref='user',uselist=False)  # 个人用户信息外键关系
 
-
     def __repr__(self):
         return "<User %r>" % self.name
 
