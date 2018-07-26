@@ -24,7 +24,6 @@ class User(Base, UserMixin):
     email = db.Column(db.String(100))  # 邮箱
     _password = db.Column('password',db.String(100))  # 密码
     role = db.Column(db.SmallInteger, default=ROLE_USER)  # 角色
-
     user_company_info = db.relationship('Company', backref='user', uselist=False)  # 企业信息外键关系
     user_user_info = db.relationship('Personal', backref='user',uselist=False)  # 个人用户信息外键关系
 
