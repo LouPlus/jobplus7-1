@@ -10,7 +10,7 @@ def Unicode():
     return chr(val)
 
 #生成user
-def iter_user():
+def iter_personal():
     
     for i in range(20):
         yield User(
@@ -42,9 +42,9 @@ def iter_user():
                     #name=Unicode()+f.company(),
                     address=f.address(),
                     phone=f.phone_number(),
-                    summary=f.sentence()
-                    field=f.random_element(elements=('医药','互联网', '金融'))
-                    financing=f.random_element(elements=('A轮','B轮','C轮','天使轮'))
+                    summary=f.sentence(),
+                    field=f.random_element(elements=('医药', '互联网', '金融')),
+                    financing=f.random_element(elements=('A轮','B轮','C轮','天使轮')),
                     )
 
 #职位信息
@@ -64,9 +64,9 @@ def iter_job():
                     )
 
 def run():
-    for user in iter_user():
+    for user in iter_personal():
         db.session.add(user)
-    for company in iter_personal():
+    for company in iter_user():
         db.session.add(company)
     for job in iter_job():
         db.session.add(job)
