@@ -43,13 +43,9 @@ def iter_personal():
                     address=f.address(),
                     phone=f.phone_number(),
                     summary=f.sentence(),
-<<<<<<< HEAD
+
                     field=f.random_element(elements=('医药', '互联网', '金融')),
                     financing=f.random_element(elements=('A轮','B轮','C轮','天使轮')),
-=======
-                    field=f.random_element(elements=('医药','互联网', '金融')),
-                    financing=f.random_element(elements=('A轮','B轮','C轮','天使轮'))
->>>>>>> 实现个人信息配置页面
                     )
 
 #职位信息
