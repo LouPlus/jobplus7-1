@@ -22,7 +22,7 @@ def iter_personal():
 
         
 #生成公司和个人信息,文件路径暂时未生成，logo,简历        
-def iter_user():
+def iter_personal():
     for user in User.query:
         print('user.role',user.role)
         if user.role == 10:
@@ -43,8 +43,13 @@ def iter_user():
                     address=f.address(),
                     phone=f.phone_number(),
                     summary=f.sentence(),
+<<<<<<< HEAD
                     field=f.random_element(elements=('医药', '互联网', '金融')),
                     financing=f.random_element(elements=('A轮','B轮','C轮','天使轮')),
+=======
+                    field=f.random_element(elements=('医药','互联网', '金融')),
+                    financing=f.random_element(elements=('A轮','B轮','C轮','天使轮'))
+>>>>>>> 实现个人信息配置页面
                     )
 
 #职位信息
