@@ -1,0 +1,43 @@
+{%extends 'base.html'%}
+{%from 'macros.html' import render_pagination%}
+{%block title%}
+求职者－主页
+{%endblock %}
+{%block body%}
+<div class='row'>
+    <div class='col-md-3'>
+        <div class='list-group'>
+            <a href='' class='list-group-item'>投递情况</a>
+            <a href="{{ url_for('user.profile') }}" type="button" class="btn btn-primary">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改信息
+</a>
+        </div>
+    </div>
+    <div class='col-md-9'>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>职位</th>
+              <th>公司</th>
+              <th>月薪</th>
+              <th>投递时间</th>
+              <th>状态</th>
+            </tr>
+        </thead>
+            <tbody>
+              {% for course in pagination.items %}
+              <tr>
+                  <td><a href='#'>{{ job.name }}</a></td>
+                  <td>{{job.}}</td>
+                <td>{{job.mixpay}}-{{job.maxpay}}</td>
+                <td>{{jobwanted.created_at}}</td>
+                <td>{{jobwanted.state}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+    {{ render_pagination(pagination, 'admin.courses') }}
+</div>
+
+{%endblock %}
+

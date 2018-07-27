@@ -19,10 +19,10 @@ def register_extensions(app):
     login_manager.login_view = 'front.login'
 
 def register_blueprints(app):
-    from .handlers import front, admin, jobs, user, company
+    from .handlers import front, admin, job, user, company
     app.register_blueprint(front)
     app.register_blueprint(admin)
-    app.register_blueprint(jobs)
+    app.register_blueprint(job)
     app.register_blueprint(user)
     app.register_blueprint(company)
 

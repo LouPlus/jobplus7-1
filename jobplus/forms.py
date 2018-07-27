@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, TextAreaField, IntegerField
 from wtforms.validators import Length, Email,EqualTo, Required, URL, NumberRange
 from jobplus.models import db, User
@@ -41,5 +42,36 @@ class RegisterForm(FlaskForm):
         db.session.add(user)
         db.session.commit()
         return user
+
+
+class PersonalForm(FlaskForm):
+    name = StringField('真实名', validators=[Required(), Length(1, 5)])
+    email = StringField('邮箱', validators=[Required(), Email()])
+    password = PasswordField('密码(optional)')
+    phone = StringField('phone number', validators=[Required(), Length(11,12)])
+    jobyear = IntegerField('job year', validators=[Required(),NumberRange(0,100)])
+    #file upload
+    resume = FileField('resume',validators=[
+        FileRequired(),
+        FileAllowed(['doc','docx','pdf'],'doc only')]
+        )
+    submit = SubmitField('提交')
+
+    def validate_email(self, field):
+        if not User.query.filter_by(email=field.data).first():
+            raise ValidationError('邮箱错误')
+
+    def validate_password(self,field):
+        if field.data:
+            if 6 <= len(field.data) <= 12:
+                raise validationError('密码必须6｀12位')
+
+    def create_person(self, person):
+        db.session.add(person)
+        db.session.commit()
+
+
+
+
 
 
