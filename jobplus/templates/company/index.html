@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% from "macros.html" import render_pagination %}
+
+{% block title %}Companys List{% endblock %}
+
+{% block body %}
+<div class="row">
+    {% for company in pagination.items %}
+    <div class="col-sm-6 col-md-4 course">
+        <div class="thumbnail">
+            <a href="{{ url_for('company.detail', company_id=company.id) }}" target="_blank">
+                <img src="" alt="公司">
+                <div class="caption">
+                    <h4 class="company__name">{{company.name}}</h4>
+                    <p> {{company.field}}  {{company.financing}}</p>
+                    <p class="course__description">{{company.description}}</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{{ render_pagination(pagination, 'front.index') }}
+{% endblock %}
+
