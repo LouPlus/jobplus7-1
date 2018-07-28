@@ -11,7 +11,6 @@ def Unicode():
 
 #生成user
 def iter_user():
-
     for i in range(20):
         yield User(
                 name=str(f.random_int())+f.user_name(),
@@ -42,9 +41,9 @@ def iter_personal():
                     name=name,
                     #name=Unicode()+f.company(),
                     address=f.address(),
+                    url='https://www.baidu.com',
                     phone=f.phone_number(),
                     summary=f.sentence(),
-
                     field=f.random_element(elements=('医药', '互联网', '金融')),
                     financing=f.random_element(elements=('A轮','B轮','C轮','天使轮')),
                     )
@@ -90,6 +89,4 @@ def run():
     except Exception as e:
         print(e)
         db.session.rollback()
-
-
 

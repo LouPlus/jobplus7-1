@@ -24,10 +24,8 @@ class User(Base, UserMixin):
     email = db.Column(db.String(100))  # 邮箱
     _password = db.Column('password',db.String(100))  # 密码
     role = db.Column(db.SmallInteger, default=ROLE_USER)  # 角色
-
     user_company_info = db.relationship('Company', backref='user', uselist=False)  # 企业信息外键关系
     user_user_info = db.relationship('Personal', backref='user',uselist=False)  # 个人用户信息外键关系
-
 
     def __repr__(self):
         return "<User %r>" % self.name
@@ -69,6 +67,7 @@ class Company(Base):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # 所属会员
     name = db.Column(db.String(100), unique=True)  # 公司名称
     address = db.Column(db.String(100))  # 公司地址
+    url = db.Column(db.String(64)) # 公司官网
     phone = db.Column(db.String(11))  # 公司电话
     logo = db.Column(db.String(255))  # 公司logo
     summary = db.Column(db.Text)  # 公司简介
