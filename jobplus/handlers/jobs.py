@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 from jobplus.models import Job
 
-jobs = Blueprint('job', __name__, url_prefix='/jobs')
+jobs = Blueprint('jobs', __name__, url_prefix='/jobs')
 
 @jobs.route('/<int:job_id>')
 def detail(job_id):
