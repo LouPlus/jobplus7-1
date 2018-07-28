@@ -22,7 +22,7 @@ def iter_user():
 
         
 #生成公司和个人信息,文件路径暂时未生成，logo,简历        
-def iter_user():
+def iter_personal():
     for user in User.query:
         print('user.role',user.role)
         if user.role == 10:
