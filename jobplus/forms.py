@@ -47,11 +47,11 @@ class RegisterForm(FlaskForm):
 class PersonalForm(FlaskForm):
     name = StringField('真实名', validators=[Required(), Length(1, 5)])
     email = StringField('邮箱', validators=[Required(), Email()])
-    password = PasswordField('密码(optional)')
-    phone = StringField('phone number', validators=[Required(), Length(11,12)])
-    jobyear = IntegerField('job year', validators=[Required(),NumberRange(0,100)])
+    password = PasswordField('密码(不填不改变)')
+    phone = StringField('手机号', validators=[Required(), Length(11,12)])
+    jobyear = IntegerField('工作年限', validators=[Required(),NumberRange(0,100)])
     #file upload
-    resume = FileField('resume',validators=[
+    resume = FileField('简历',validators=[
         FileRequired(),
         FileAllowed(['doc','docx','pdf'],'doc only')]
         )

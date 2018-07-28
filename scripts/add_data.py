@@ -10,8 +10,8 @@ def Unicode():
     return chr(val)
 
 #生成user
-def iter_personal():
-    
+def iter_user():
+
     for i in range(20):
         yield User(
                 name=str(f.random_int())+f.user_name(),
@@ -20,8 +20,8 @@ def iter_personal():
                 role=f.random_element(elements=(10,20,30)),
                 )
 
-        
-#生成公司和个人信息,文件路径暂时未生成，logo,简历        
+
+#生成公司和个人信息,文件路径暂时未生成，logo,简历
 def iter_personal():
     for user in User.query:
         print('user.role',user.role)
@@ -64,13 +64,26 @@ def iter_job():
                     education=f.random_element(elements=('无限制','专科','本科','博士'))
                     )
 
+# 生成投递表
+def iter_jobwanted():
+    for personal in Personal.query:
+        if randint(0,1) == 1:
+            for job in Job.query:
+                if randint(0,1) == 0:
+                    yield JobWanted(
+                            job_id=job.id,
+                            personal_id=personal.id,
+                            state=f.random_element(elements=(1,2,3))
+                            )
 def run():
-    for user in iter_personal():
+    for user in iter_user():
         db.session.add(user)
-    for company in iter_user():
+    for company in iter_personal():
         db.session.add(company)
     for job in iter_job():
         db.session.add(job)
+    for jobwanted in iter_jobwanted():
+        db.session.add(jobwanted)
     try:
         db.session.commit()
     except Exception as e:

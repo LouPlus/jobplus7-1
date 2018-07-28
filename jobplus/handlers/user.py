@@ -1,9 +1,9 @@
 from copy import deepcopy
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
 from werkzeug import secure_filename
 from flask_login import login_required, current_user
 from jobplus.forms import PersonalForm
-from jobplus.models import Personal
+from jobplus.models import Personal, User, JobWanted, Job, Company
 from jobplus.decorators import person_required
 
 
@@ -13,7 +13,18 @@ user = Blueprint('user', __name__, url_prefix='/user')
 @user.route('/')
 @person_required
 def index():
-    return render_template('user/index.html')
+    page = request.args.get('page',default=1,type=int)
+    # 用current_user.id作为查询起点,有别的方法马?
+    person = User.query.get(current_user.id).user_user_info
+    jobwanted = JobWanted.query.filter_by(personal_id=person.id)
+    pagination = jobwanted.paginate(
+            page=page,
+            per_page=current_app.config['ADMIN_PER_PAGE'],
+            error_out=False
+            )
+    print(person)
+    print(pagination.items)
+    return render_template('user/index.html',pagination=pagination)
 
 
 @user.route('/profile', methods=['POST','GET'])
@@ -26,7 +37,7 @@ def profile():
         #填充表格,保留person的id信息
         form = PersonalForm(obj=person)
         form.email.data = user.email
-    else:   
+    else:
         person = Personal()
         form = PersonalForm()
     if form.validate_on_submit():

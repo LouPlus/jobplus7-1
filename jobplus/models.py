@@ -24,9 +24,8 @@ class User(Base, UserMixin):
     email = db.Column(db.String(100))  # 邮箱
     _password = db.Column('password',db.String(100))  # 密码
     role = db.Column(db.SmallInteger, default=ROLE_USER)  # 角色
-    addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)  # 注册时间
-    user_company_info = db.relationship('Company', backref='user')  # 企业信息外键关系
-    user_user_info = db.relationship('Personal', backref='user')  # 个人用户信息外键关系
+    user_company_info = db.relationship('Company', backref='user', uselist=False)  # 企业信息外键关系
+    user_user_info = db.relationship('Personal', backref='user',uselist=False)  # 个人用户信息外键关系
 
     def __repr__(self):
         return "<User %r>" % self.name
@@ -45,7 +44,7 @@ class User(Base, UserMixin):
         return check_password_hash(self._password, password)
 
 
-        
+
 
 
 # 个人用户
@@ -104,10 +103,13 @@ class Job(Base):
 # 求职
 class JobWanted(Base):
     __tablename__ = 'jobwanted'  # 求职表
+    RESUME_PENDING = 1 # 处理中
+    RESUME_INTERVIEW = 2 # 面试
+    RESUME_IMPROPER = 3 # 不合适
     id = db.Column(db.Integer, primary_key=True)  # 编号
     personal_id = db.Column(db.Integer, db.ForeignKey('personal.id'))  # 所属个人用户
     job_id = db.Column(db.Integer, db.ForeignKey('job.id'))  # 所属工作
-    addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)  # 投递简历时间
+    state = db.Column(db.SmallInteger,default=RESUME_PENDING) # 处理状态
 
     def __repr__(self):
         return "<JobWanted %r>" % self.id
