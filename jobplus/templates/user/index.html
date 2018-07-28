@@ -25,18 +25,23 @@
             </tr>
         </thead>
             <tbody>
-              {% for course in pagination.items %}
+
+              {% for jobwanted in pagination.items %}
+              {% with job=jobwanted.job %}
               <tr>
+                  <!--连接到职位-->
                   <td><a href='#'>{{ job.name }}</a></td>
-                  <td>{{job.}}</td>
-                <td>{{job.mixpay}}-{{job.maxpay}}</td>
+                  <td>{{  job.company.name }}</td>
+                <td>{{job.min_pay}}-{{job.max_pay}}</td>
                 <td>{{jobwanted.created_at}}</td>
                 <td>{{jobwanted.state}}</td>
               </tr>
+              {% endwith %}
               {% endfor %}
             </tbody>
         </table>
-    {{ render_pagination(pagination, 'admin.courses') }}
+    {{ render_pagination(pagination, 'user.index') }}
+
 </div>
 
 {%endblock %}
