@@ -13,24 +13,26 @@ class Base(db.Model):
                         onupdate=datetime.utcnow)
 
 
-# ÓÃ»§
+# ç”¨æˆ·
 class User(Base, UserMixin):
-    __tablename__ = "user"  # ÓÃ»§±í
-    ROLE_USER = 10  # Ò»°ãÓÃ»§
-    ROLE_STAFF = 20  # ÆóÒµÓÃ»§
-    ROLE_ADMIN = 30  # ³¬¼¶¹ÜÀíÔ±
-    id = db.Column(db.Integer, primary_key=True)  # ±àºÅ
-    name = db.Column(db.String(100), unique=True)  # »áÔ±Ãû
-    email = db.Column(db.String(100))  # ÓÊÏä
-    _password = db.Column('password',db.String(100))  # ÃÜÂë
-    role = db.Column(db.SmallInteger, default=ROLE_USER)  # ½ÇÉ«
-    user_company_info = db.relationship('Company', backref='user', uselist=False)  # ÆóÒµĞÅÏ¢Íâ¼ü¹ØÏµ
-    user_user_info = db.relationship('Personal', backref='user',uselist=False)  # ¸öÈËÓÃ»§ĞÅÏ¢Íâ¼ü¹ØÏµ
+    __tablename__ = "user"  # ç”¨æˆ·è¡¨
+    ROLE_USER = 10  # ä¸€èˆ¬ç”¨æˆ·
+    ROLE_STAFF = 20  # ä¼ä¸šç”¨æˆ·
+    ROLE_ADMIN = 30  # è¶…çº§ç®¡ç†å‘˜
+    id = db.Column(db.Integer, primary_key=True)  # ç¼–å·
+    name = db.Column(db.String(100), unique=True)  # ä¼šå‘˜å
+    email = db.Column(db.String(100))  # é‚®ç®±
+    _password = db.Column('password',db.String(100))  # å¯†ç 
+    role = db.Column(db.SmallInteger, default=ROLE_USER)  # è§’è‰²
+
+    user_company_info = db.relationship('Company', backref='user', uselist=False)  # ä¼ä¸šä¿¡æ¯å¤–é”®å…³ç³»
+    user_user_info = db.relationship('Personal', backref='user',uselist=False)  # ä¸ªäººç”¨æˆ·ä¿¡æ¯å¤–é”®å…³ç³»
+
 
     def __repr__(self):
         return "<User %r>" % self.name
 
-    #ÓÃ»§ÃÜÂëhashÉú³ÉºÍ¼ìÑé
+    #ç”¨æˆ·å¯†ç hashç”Ÿæˆå’Œæ£€éªŒ
     @property
     def password(self):
         return self._password
@@ -44,55 +46,52 @@ class User(Base, UserMixin):
         return check_password_hash(self._password, password)
 
 
-
-
-
-# ¸öÈËÓÃ»§
+# ä¸ªäººç”¨æˆ·
 class Personal(Base):
-    __tablename__ = "personal"  # ¸öÈËÓÃ»§ĞÅÏ¢±í
-    id = db.Column(db.Integer, primary_key=True)  # ±àºÅ
+    __tablename__ = "personal"  # ä¸ªäººç”¨æˆ·ä¿¡æ¯è¡¨
+    id = db.Column(db.Integer, primary_key=True)  # ç¼–å·
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
-            index=True,unique=True)# ËùÊô»áÔ±
-    name = db.Column(db.String(20))  # ÓÃ»§ĞÕÃû
-    phone = db.Column(db.String(11))  # ÓÃ»§µç»°
-    jobyear = db.Column(db.Integer)  # ¹¤×÷ÄêÏŞ
-    resume = db.Column(db.String(255))  # ¼òÀú
+            index=True,unique=True)# æ‰€å±ä¼šå‘˜
+    name = db.Column(db.String(20))  # ç”¨æˆ·å§“å
+    phone = db.Column(db.String(11))  # ç”¨æˆ·ç”µè¯
+    jobyear = db.Column(db.Integer)  # å·¥ä½œå¹´é™
+    resume = db.Column(db.String(255))  # ç®€å†
     personal_jobwanted = db.relationship('JobWanted', backref='personal')
 
     def __repr__(self):
         return "<Personal %r>" % self.name
 
 
-# ÆóÒµÓÃ»§
+# ä¼ä¸šç”¨æˆ·
 class Company(Base):
-    __tablename__ = "company"  # ¹«Ë¾ĞÅÏ¢±í
-    id = db.Column(db.Integer, primary_key=True)  # ±àºÅ
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # ËùÊô»áÔ±
-    name = db.Column(db.String(100), unique=True)  # ¹«Ë¾Ãû³Æ
-    address = db.Column(db.String(100))  # ¹«Ë¾µØÖ·
-    phone = db.Column(db.String(11))  # ¹«Ë¾µç»°
-    logo = db.Column(db.String(255))  # ¹«Ë¾logo
-    summary = db.Column(db.Text)  # ¹«Ë¾¼ò½é
-    field = db.Column(db.String(64)) # ¹«Ë¾ËùÊôÁìÓò
-    financing = db.Column(db.String(64)) # ÈÚ×ÊÇé¿ö
-    company_job = db.relationship('Job', backref='company')  # ¹¤×÷Íâ¼ü¹ØÏµ
+    __tablename__ = "company"  # å…¬å¸ä¿¡æ¯è¡¨
+    id = db.Column(db.Integer, primary_key=True)  # ç¼–å·
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # æ‰€å±ä¼šå‘˜
+    name = db.Column(db.String(100), unique=True)  # å…¬å¸åç§°
+    address = db.Column(db.String(100))  # å…¬å¸åœ°å€
+    phone = db.Column(db.String(11))  # å…¬å¸ç”µè¯
+    logo = db.Column(db.String(255))  # å…¬å¸logo
+    summary = db.Column(db.Text)  # å…¬å¸ç®€ä»‹
+    field = db.Column(db.String(64)) # å…¬å¸æ‰€å±é¢†åŸŸ
+    financing = db.Column(db.String(64)) # èèµ„æƒ…å†µ
+    company_job = db.relationship('Job', backref='company')  # å·¥ä½œå¤–é”®å…³ç³»
 
     def __repr__(self):
         return "<Company %r>" % self.name
 
 
-# ¹¤×÷
+# å·¥ä½œ
 class Job(Base):
-    __tablename__ = "job"  # ¹¤×÷±í
-    id = db.Column(db.Integer, primary_key=True)  # ±àºÅ
-    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))  # ËùÊôÆóÒµ
-    name = db.Column(db.String(100))  # Ö°Î»Ãû³Æ
-    min_pay = db.Column(db.Integer)  # ×îµÍĞ½³ê
-    max_pay = db.Column(db.Integer)  # ×î¸ßĞ½³ê
-    address = db.Column(db.String(100))  # ¹¤×÷µØµã
-    label = db.Column(db.String(255))  # Ö°Î»±êÇ©
-    jobyear = db.Column(db.String(20))  # ¹¤×÷ÄêÏŞÒªÇó
-    education = db.Column(db.String(20))  # ¹¤×÷Ñ§ÀúÒªÇó
+    __tablename__ = "job"  # å·¥ä½œè¡¨
+    id = db.Column(db.Integer, primary_key=True)  # ç¼–å·
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))  # æ‰€å±ä¼ä¸š
+    name = db.Column(db.String(100))  # èŒä½åç§°
+    min_pay = db.Column(db.Integer)  # æœ€ä½è–ªé…¬
+    max_pay = db.Column(db.Integer)  # æœ€é«˜è–ªé…¬
+    address = db.Column(db.String(100))  # å·¥ä½œåœ°ç‚¹
+    label = db.Column(db.String(255))  # èŒä½æ ‡ç­¾
+    jobyear = db.Column(db.String(20))  # å·¥ä½œå¹´é™è¦æ±‚
+    education = db.Column(db.String(20))  # å·¥ä½œå­¦å†è¦æ±‚
     description = db.Column(db.Text)
     job_JobWanted = db.relationship('JobWanted', backref='job')
 
@@ -100,16 +99,18 @@ class Job(Base):
         return "<Job %r>" % self.id
 
 
-# ÇóÖ°
+# æ±‚èŒ
 class JobWanted(Base):
-    __tablename__ = 'jobwanted'  # ÇóÖ°±í
-    RESUME_PENDING = 1 # ´¦ÀíÖĞ
-    RESUME_INTERVIEW = 2 # ÃæÊÔ
-    RESUME_IMPROPER = 3 # ²»ºÏÊÊ
-    id = db.Column(db.Integer, primary_key=True)  # ±àºÅ
-    personal_id = db.Column(db.Integer, db.ForeignKey('personal.id'))  # ËùÊô¸öÈËÓÃ»§
-    job_id = db.Column(db.Integer, db.ForeignKey('job.id'))  # ËùÊô¹¤×÷
-    state = db.Column(db.SmallInteger,default=RESUME_PENDING) # ´¦Àí×´Ì¬
+    __tablename__ = 'jobwanted'  # æ±‚èŒè¡¨
+
+    RESUME_PENDING = 1 # å¤„ç†ä¸­
+    RESUME_INTERVIEW = 2 # é¢è¯•
+    RESUME_IMPROPER = 3 # ä¸åˆé€‚
+    id = db.Column(db.Integer, primary_key=True)  # ç¼–å·
+    personal_id = db.Column(db.Integer, db.ForeignKey('personal.id'))  # æ‰€å±ä¸ªäººç”¨æˆ·
+    job_id = db.Column(db.Integer, db.ForeignKey('job.id'))  # æ‰€å±å·¥ä½œ
+    state = db.Column(db.SmallInteger,default=RESUME_PENDING) # å¤„ç†çŠ¶æ€
+
 
     def __repr__(self):
         return "<JobWanted %r>" % self.id
