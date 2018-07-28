@@ -76,9 +76,9 @@ def iter_jobwanted():
                             state=f.random_element(elements=(1,2,3))
                             )
 def run():
-    for user in iter_personal():
+    for user in iter_user():
         db.session.add(user)
-    for company in iter_user():
+    for company in iter_personal():
         db.session.add(company)
     for job in iter_job():
         db.session.add(job)
