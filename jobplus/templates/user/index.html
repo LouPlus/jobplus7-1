@@ -25,6 +25,7 @@
             </tr>
         </thead>
             <tbody>
+
               {% for jobwanted in pagination.items %}
               {% with job=jobwanted.job %}
               <tr>
@@ -40,6 +41,7 @@
             </tbody>
         </table>
     {{ render_pagination(pagination, 'user.index') }}
+
 </div>
 
 {%endblock %}

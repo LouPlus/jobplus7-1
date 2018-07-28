@@ -1,9 +1,9 @@
-from copy import deepcopy
 from flask import Blueprint, render_template, flash, redirect, url_for, request, current_app
 from werkzeug import secure_filename
 from flask_login import login_required, current_user
 from jobplus.forms import PersonalForm
 from jobplus.models import Personal, User, JobWanted, Job, Company
+
 from jobplus.decorators import person_required
 
 
@@ -25,6 +25,7 @@ def index():
     print(person)
     print(pagination.items)
     return render_template('user/index.html',pagination=pagination)
+
 
 
 @user.route('/profile', methods=['POST','GET'])
