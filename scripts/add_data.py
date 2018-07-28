@@ -41,6 +41,7 @@ def iter_user():
                     name=name,
                     #name=Unicode()+f.company(),
                     address=f.address(),
+                    url='https://www.baidu.com',
                     phone=f.phone_number(),
                     summary=f.sentence(),
                     field=f.random_element(elements=('医药', '互联网', '金融')),

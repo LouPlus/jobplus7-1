@@ -42,7 +42,7 @@ text-align: center;
         {% for job in jobs.items %}
         <div class='col-sm-6 col-md-3'>
             <div class='jobbox'> 
-                <a href='#'>
+                <a href="{{ url_for('jobs.detail', job_id=job.id) }}">
                     <b>{{ job.name}}</b>
                     <span>[{{ job.addtime }}]</span>
                     <p>{{job.jobyear}}-{{ job.education}}</p>
@@ -75,7 +75,7 @@ text-align: center;
         {% for company in companies.items %}
         <div class='col-xs-6 col-md-3'>
             <div class='jobbox'>
-            <a href='?'>
+                <a href="{{ url_for('company.detail', company_id=company.id) }}>
                 <div style='width:60%;height:60px;positon:relative'>
                 <img src='..' alt='..'>
             </div>
