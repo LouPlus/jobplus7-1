@@ -1,0 +1,178 @@
+{%extends 'base.html'%}
+{%from 'macros.html' import render_pagination%}
+{%block title%}
+公司管理－未处理列表
+{%endblock %}
+{% block head_css %}
+    {{ super() }}
+    <style>
+        .frame_style{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+{% endblock %}
+
+
+{%block body%}
+<div class='row'>
+    <div class='col-md-3'>
+        <div class='list-group'>
+            <a href='' class='list-group-item'>应聘管理</a>
+            <a href='' class='list-group-item'>职位管理</a>
+        </div>
+        {% block operation %}
+        <div class='list-group'>
+            <a href=""  class="list-group-item active">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>待处理
+              <span class='badge'>1</span>
+</a>
+            <a href=""  class="list-group-item">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>面试
+              <span class='badge'>1</span>
+</a>
+            <a href=""  class="list-group-item">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>不合适
+              <span class='badge'>1</span>
+</a>
+        </div>
+        {% endblock %}
+    </div>
+    <div class='col-md-9'>
+        {% block admin %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>职位名称</th>
+              <th>求职者姓名</th>
+              <th>投递时间</th>
+              <th>简历</th>
+              <th>操作</th>
+            </tr>
+        </thead>
+            <tbody>
+                {%for jobwanted in pagination.items %}
+                <tr>
+                <td>{{ jobwanted.id }}</td>
+                <td>{{ jobwanted.job.name }}</td>
+                <td>{{ jobwanted.personal.name }}</td>
+                <td>{{ jobwanted.created_at}}</td>
+                <td> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="{{ jobwanted.personal.resume }}">点击查看</button>
+                <td>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-operation" data-complete-text='已拒绝' auto-complete='off'>不合适</button>
+                        <button type="button" class="btn btn-default btn-operation" data-complete-text='待面试' auto-complete='off'>面试</button>
+                    </div>
+                </td>
+            {% endfor %}
+                </tr>
+
+            </tbody>
+       </table>
+ <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">简历:</h4>
+      </div>
+      <div class="modal-body">
+        <div class='row'>
+            <div class="col-lg-12" style="height: 450px">
+                <!--iframe class="frame_style" src="{{url_for('static',filename='/pdfjs/web/viewer.html?file=/jobplus/static/doc/1481953691.pdf')}}"-->
+                <iframe class="frame_style" src="{{url_for('static',filename='/pdfjs/web/viewer.html')}}"+"?file=\jobplus\static\doc\1481953691.pdf">
+                <!--iframe class="frame_style"--> 
+                </iframe>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-modal" data-dismiss="modal">不合适</button>
+        <button type="button" class="btn btn-primary btn-modal" data-dismiss="modal">面试</button>
+      </div>
+    </div>
+  </div>
+</div>
+        {{ render_pagination(pagination,'company.resume_pending') }}
+        {% endblock %}
+</div>
+
+{%endblock %}
+
+{% block tail_js %}
+{{ super() }}
+    <script>
+$('#exampleModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+    tdButton = button.parent().siblings().last().children('.btn-operation)
+    id = button.parent().siblings().first()
+    if(tdButton.text()=='待面试'||tdButton.text()=='已拒绝'){
+        $('.modal-footer').children().eq(0).text('bmhw')
+    }
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text(id + '的简历:')
+})
+    </script>
+    
+    <script>
+        /*$(document).ready(function(){
+            $('.btn-interview').click(function(){
+                var id=$(this).parents('tr').chidren('td:first').text()
+                var button = $(this)
+                alert(button.text())
+                $.post('/company/admin/resume_pending',
+                    {
+                        state:2,
+                        jobwanted_id:id
+                    }, function(data,state){
+                        if(state='success'){
+                            button.button('complete');
+                            button.prop('disabled', true);
+                            button.siblings().remove()
+                        }
+                        else{
+                            alert('操作失败,请稍候再试');
+                        };
+                    })
+            }))
+    */
+var nowstate='伤心',nt='欲绝'
+$(function(){
+$('.btn-default').click(function(){
+    var id=$(this).parents('tr').children('td:first').text();
+    var btn = $(this);
+    if(btn.text()=='面试'){
+        nowstate=2;
+        nt='待面试';
+    }else if(btn.text()=='不合适'){
+        nowstate=3;
+        nt='已拒绝'
+    };
+    $.post('/company/admin/resume_pending',{
+        state:nowstate,
+        jobwanted_id:id
+    },function(data,status){
+        if(status='success'){
+            btn.addClass('btn-success')
+            btn.text(nt);
+            btn.siblings().remove()
+            btn.prop('disabled',true)
+        }else{
+            alert('操作失败,稍后再试')
+        };
+    });
+    //a标签下这个并不起作用,同样的e.preventDefault()
+    //return false;
+})
+})
+    </script>
+    <!--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.0.201604172/pdfobject.min.js"></script>
+    <script>
+        <PDFObject.embed('{{url_for('static',filename='/doc/1481953691.pdf')}}','.frame-style')
+    </script>-->
+{% endblock%}

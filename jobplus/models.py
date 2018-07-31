@@ -24,7 +24,7 @@ class User(Base, UserMixin):
     email = db.Column(db.String(100))  # 邮箱
     _password = db.Column('password',db.String(100))  # 密码
     role = db.Column(db.SmallInteger, default=ROLE_USER)  # 角色
-    user_company_info = db.relationship('Company', backref='user', uselist=False)  # 企业信息外键关系
+    user_company_info = db.relationship('Company',backref='user', uselist=False)  # 企业信息外键关系
     user_user_info = db.relationship('Personal', backref='user',uselist=False)  # 个人用户信息外键关系
 
     def __repr__(self):
@@ -73,7 +73,7 @@ class Company(Base):
     summary = db.Column(db.Text)  # 公司简介
     field = db.Column(db.String(64)) # 公司所属领域
     financing = db.Column(db.String(64)) # 融资情况
-    company_job = db.relationship('Job', backref='company')  # 工作外键关系
+    company_job = db.relationship('Job', backref='company', uselist=False)  # 工作外键关系
 
     def __repr__(self):
         return "<Company %r>" % self.name
@@ -108,6 +108,8 @@ class JobWanted(Base):
     id = db.Column(db.Integer, primary_key=True)  # 编号
     personal_id = db.Column(db.Integer, db.ForeignKey('personal.id'))  # 所属个人用户
     job_id = db.Column(db.Integer, db.ForeignKey('job.id'))  # 所属工作
+    # 在公司后台分页时,遇到InstrumentedList object has not query,所以增加这个字段
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))  # 所属公司
     state = db.Column(db.SmallInteger,default=RESUME_PENDING) # 处理状态
 
 
