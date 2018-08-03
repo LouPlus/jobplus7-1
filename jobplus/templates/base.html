@@ -40,7 +40,7 @@
             {% if current_user.is_authenticated and current_user.role == 20 %}
             <li><a href="{{url_for('company.resume_pending')}}">管理</a></li>
             {% elif current_user.is_authenticated and current_user.role == 30 %}
-            <li><a href="{{url_for('admin.index')}}">管理</a></li>
+            <li><a href="{{url_for('admin.users')}}">管理</a></li>
             {% endif %}
   
         </ul> 

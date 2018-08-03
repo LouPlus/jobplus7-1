@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, current_app, request
 from jobplus.models import Company, User, Job, JobWanted, db
 from jobplus.decorators import admin_required
 from flask_login import current_user
+from jobplus.forms import CompanyeditForm
 
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')

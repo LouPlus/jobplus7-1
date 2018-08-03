@@ -1,5 +1,5 @@
 {% extends 'admin/admin_base.html' %}
-{% from 'macros.html' import render_form}
+{% from 'macros.html' import render_form,render_pagination %}
 
 {% block title %}
 管理-用户
@@ -38,10 +38,10 @@ div class='list-group'>
         <tr>
             <!--可以合在一起判断-->
             <td>{{ user.id }}</td>
-            {% if user.role == 20 %}
-            <td>{{ user.name }}</td>
-            {%else%}
+            {%if user.role == 20%}
             <td>{{ user.user_company_info.name }}</td>
+            {%else%}
+            <td>{{ user.name }}</td>
             {%endif%}
             {% if user.role == 10 %}
             <td>求职者</td>
@@ -58,14 +58,14 @@ div class='list-group'>
             <td></td>
             <td></td>
             {% endif %}
-            {% if user.role == 20}
+            {% if user.role == 20%}
             <td>{{ user.user_company_info.url }}
             {%else%}
             <td></td>
             {%endif%}
             <td>
                 <div class='btn-group'>
-                    {% if user.role == 10}
+                    {% if user.role == 10%}
                     <a href='{{ url_for('admin.users_edit', id=user.id) }}' class='btn btn-default'>编辑</a>
                     {%else%}
                     <a href='{{ url_for('admin.company_edit', id=user.id) }}' class='btn btn-default'>编辑</a>
@@ -73,17 +73,24 @@ div class='list-group'>
                     {% if user.state == user.USER_DISABLE %}
                     <button id='state_change' class='btn btn-default'>启用</button>
                     {%else%}
-                    <button class='btn btn-default'>禁用</button>
+                    <button id='state_change' class='btn btn-default'>禁用</button>
                     {%endif%}
                 </div>
             </td>
         </tr>
+        {% endfor %}
     </tbody>
 </table>
+{{ render_pagination(pagination,'admin.users')}}
 {% endblock %}
  
 {% block tail_js %}
+      <script src="http://labfile.oss.aliyuncs.com/courses/923/week7/code/jquery/3.2.1/jquery.min.js"></script>
+      <script src="http://labfile.oss.aliyuncs.com/courses/923/week7/code/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script>
+$(function(){$('#state_change').click(function(){
+                alert('ha')})})
+/*
         $('#state_change').click(function(){
             var id=$(this).parents('td').siblings().eq(0).value()
             if($(this).text()=='启用'){
@@ -104,6 +111,7 @@ div class='list-group'>
                 }
             })
         })
+        */
     </script>
 {% endblock %}
 
