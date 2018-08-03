@@ -20,7 +20,6 @@ def iter_user():
                 )
 
 
-
 #生成公司和个人信息,文件路径暂时未生成，logo,简历
 def iter_personal():
     for user in User.query:
@@ -76,6 +75,8 @@ def iter_jobwanted():
                         company_id= job.company_id,
                         state=f.random_element(elements=(1,2,3))
                         )
+
+
 def run():
     for user in iter_user():
         db.session.add(user)
