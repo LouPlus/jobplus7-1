@@ -1,0 +1,50 @@
+{%extends 'base.html'%}
+{%from 'macros.html' import render_pagination%}
+{%block title%}
+公司管理－未处理列表
+{%endblock %}
+{%block body%}
+<div class='row'>
+    <div class='col-md-3'>
+        <div class='list-group'>
+            <a href='' class='list-group-item'>应聘管理</a>
+            <a href='' class='list-group-item'>职位管理</a>
+        </div>
+        {% block operation %}
+        <div class='list-group'>
+            <a href=""  class="list-group-item active">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>待处理
+              <span class='badge'>1</span>
+</a>
+            <a href=""  class="list-group-item">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>面试
+              <span class='badge'>1</span>
+</a>
+            <a href=""  class="list-group-item">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>拒绝
+              <span class='badge'>1</span>
+</a>
+        </div>
+        {% endblock %}
+    </div>
+    <div class='col-md-9'>
+        {% block admin %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>职位名称</th>
+              <th>求职者姓名</th>
+              <th>投递时间</th>
+              <th>简历</th>
+              <th>操作</th>
+            </tr>
+        </thead>
+            <tbody>
+            </tbody>
+        </table>
+        {% endblock %}
+</div>
+
+{%endblock %}
+

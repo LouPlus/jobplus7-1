@@ -19,13 +19,17 @@ class User(Base, UserMixin):
     ROLE_USER = 10  # 一般用户
     ROLE_STAFF = 20  # 企业用户
     ROLE_ADMIN = 30  # 超级管理员
+    USER_ENABLE = 1  #启用
+    USER_DISABLE = 2  #禁用
     id = db.Column(db.Integer, primary_key=True)  # 编号
     name = db.Column(db.String(100), unique=True)  # 会员名
     email = db.Column(db.String(100))  # 邮箱
     _password = db.Column('password',db.String(100))  # 密码
     role = db.Column(db.SmallInteger, default=ROLE_USER)  # 角色
-    user_company_info = db.relationship('Company', backref='user', uselist=False)  # 企业信息外键关系
+    state = db.Column(db.SmallInteger, default=USER_ENABLE)  # 用户启用或者禁用
+    user_company_info = db.relationship('Company',backref='user', uselist=False)  # 企业信息外键关系
     user_user_info = db.relationship('Personal', backref='user',uselist=False)  # 个人用户信息外键关系
+
 
     def __repr__(self):
         return "<User %r>" % self.name
@@ -73,7 +77,7 @@ class Company(Base):
     summary = db.Column(db.Text)  # 公司简介
     field = db.Column(db.String(64)) # 公司所属领域
     financing = db.Column(db.String(64)) # 融资情况
-    company_job = db.relationship('Job', backref='company')  # 工作外键关系
+    company_job = db.relationship('Job', backref='company', uselist=False)  # 工作外键关系
 
     def __repr__(self):
         return "<Company %r>" % self.name
@@ -82,6 +86,10 @@ class Company(Base):
 # 工作
 class Job(Base):
     __tablename__ = "job"  # 工作表
+    JOB_OFF = 1  # 下架
+    JOB_ON = 2  # 上架
+    JOB_DELETE = 3 # 删除
+
     id = db.Column(db.Integer, primary_key=True)  # 编号
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'))  # 所属企业
     name = db.Column(db.String(100))  # 职位名称
@@ -92,6 +100,7 @@ class Job(Base):
     jobyear = db.Column(db.String(20))  # 工作年限要求
     education = db.Column(db.String(20))  # 工作学历要求
     description = db.Column(db.Text)
+    state = db.Column(db.SmallInteger,default=JOB_OFF) # 处理状态
     job_JobWanted = db.relationship('JobWanted', backref='job')
 
     def __repr__(self):
@@ -105,9 +114,12 @@ class JobWanted(Base):
     RESUME_PENDING = 1 # 处理中
     RESUME_INTERVIEW = 2 # 面试
     RESUME_IMPROPER = 3 # 不合适
+    RESUME_HIDE = 4  #不显示在企业后台,企业删除求职后的操作
     id = db.Column(db.Integer, primary_key=True)  # 编号
     personal_id = db.Column(db.Integer, db.ForeignKey('personal.id'))  # 所属个人用户
     job_id = db.Column(db.Integer, db.ForeignKey('job.id'))  # 所属工作
+    # 在公司后台分页时,遇到InstrumentedList object has not query,所以增加这个字段
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'))  # 所属公司
     state = db.Column(db.SmallInteger,default=RESUME_PENDING) # 处理状态
 
 

@@ -20,8 +20,7 @@ def iter_user():
                 )
 
 
-        
-#生成公司和个人信息,文件路径暂时未生成，logo,简历        
+#生成公司和个人信息,文件路径暂时未生成，logo,简历
 def iter_personal():
     for user in User.query:
         print('user.role',user.role)
@@ -61,20 +60,23 @@ def iter_job():
                     address=f.address(),
                     label=f.random_element(elements=('互联网','销售','管理')),
                     jobyear=f.random_int(0,100),
-                    education=f.random_element(elements=('无限制','专科','本科','博士'))
+                    education=f.random_element(elements=('无限制','专科','本科','博士')),
+                    state=f.random_element(elements=(1,2,3)),
                     )
 
 # 生成投递表
 def iter_jobwanted():
     for personal in Personal.query:
-        if randint(0,1) == 1:
-            for job in Job.query:
-                if randint(0,1) == 0:
-                    yield JobWanted(
-                            job_id=job.id,
-                            personal_id=personal.id,
-                            state=f.random_element(elements=(1,2,3))
-                            )
+        for job in Job.query:
+            if randint(0,1) == 0:
+                yield JobWanted(
+                        job_id=job.id,
+                        personal_id=personal.id,
+                        company_id= job.company_id,
+                        state=f.random_element(elements=(1,2,3))
+                        )
+
+
 def run():
     for user in iter_user():
         db.session.add(user)

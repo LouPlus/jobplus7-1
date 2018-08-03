@@ -37,8 +37,10 @@
         <ul class="nav navbar-nav">
             <li class="active"><a href="#">职位<span class="sr-only">(current)</span></a></li>
             <li><a href="{{ url_for('company.index') }}">公司</a></li>
-            {% if current_user.is_authenticated and current_user.is_admin %}
-            <li><a href="#">管理</a></li>
+            {% if current_user.is_authenticated and current_user.role == 20 %}
+            <li><a href="{{url_for('company.resume_pending')}}">管理</a></li>
+            {% elif current_user.is_authenticated and current_user.role == 30 %}
+            <li><a href="{{url_for('admin.users')}}">管理</a></li>
             {% endif %}
   
         </ul> 
@@ -51,7 +53,7 @@
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="username">{{ current_user.name }}</span><span class="caret"></span></a>
               <ul class="dropdown-menu">
-                  <li><a href="{{url_for('user.index') if current_user.role==10 else url_for('company.index')}}">我的主页</a></li>
+                  <li><a href="{{url_for('user.index') if current_user.role==10 else url_for('company.profile')}}">我的主页</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="{{ url_for('front.logout')}}">退出登录</a></li> </ul>
             </li>
@@ -82,9 +84,9 @@
           Copyright (c) 2018 By 楼+7-1
       </div>
       {% endblock %}
-      {% block tail_js %}
       <script src="http://labfile.oss.aliyuncs.com/courses/923/week7/code/jquery/3.2.1/jquery.min.js"></script>
       <script src="http://labfile.oss.aliyuncs.com/courses/923/week7/code/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+      {% block tail_js %}
       <script src="{{url_for('static',filename='main.js')}}"></script>
       {% endblock %}
     </body>    

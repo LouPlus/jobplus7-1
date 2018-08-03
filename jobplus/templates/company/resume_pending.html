@@ -1,0 +1,224 @@
+{%extends 'base.html'%}
+{%from 'macros.html' import render_pagination%}
+{%block title%}
+公司管理-应聘
+{%endblock %}
+{% block head_css %}
+    {{ super() }}
+    <style>
+        .frame_style{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+{% endblock %}
+
+
+{%block body%}
+<div class='row'>
+    <div class='col-md-3'>
+        <div class='list-group'>
+            <a href='{{url_for('company.resume_pending')}}' class='list-group-item'>应聘管理</a>
+            <a href='{{url_for('company.job')}}' class='list-group-item'>职位管理</a>
+        </div>
+        {% block operation %}
+        <div class='list-group'>
+            <a id='pending_col' href='{{url_for('company.resume_pending', state=1)}}' class="list-group-item {%if nowstate==1%}active{%endif%}">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>待处理
+              <span id='pending_num'class='badge'>{% if pending_num > 0 %}{{pending_num}}{%endif%}</span>
+</a>
+            <a href='{{url_for('company.resume_pending', state=2)}}'id='interview_col'class="list-group-item {%if nowstate==2%}active{%endif%}">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>面试
+              <span id='interview_num'class='badge'>{% if interview_num > 0 %}{{interview_num}}{%endif%}</span>
+</a>
+            <a href='{{url_for('company.resume_pending', state=3)}}' id='improper_col' class="list-group-item {%if nowstate==3%}active{%endif%}">
+              <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>不合适
+              <span class='badge' id='improper_num'>{% if improper_num > 0 %}{{improper_num}}{%endif%}</span>
+</a>
+        </div>
+        {% endblock %}
+    </div>
+    <div class='col-md-9'>
+        {% block admin %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>职位名称</th>
+              <th>求职者姓名</th>
+              <th>投递时间</th>
+              <th>简历</th>
+              <th>操作</th>
+            </tr>
+        </thead>
+            <tbody>
+                {%for jobwanted in pagination.items %}
+                <tr>
+                <td>{{ jobwanted.id }}</td>
+                <td>{{ jobwanted.job.name }}</td>
+                <td>{{ jobwanted.personal.name }}</td>
+                <td>{{ jobwanted.created_at}}</td>
+                <td> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="{{url_for('static',filename='doc/1481953691.pdf')}}">点击查看</button>
+                <td>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-operation" data-complete-text='已拒绝' auto-complete='off'>{%if nowstate==1%}不合适{%else%}撤回{%endif%}</button>
+                        <button type="button" class="btn btn-default btn-operation" data-complete-text='待面试' auto-complete='off'>{%if nowstate==1%}面试{%else%}删除{%endif%}</button>
+                    </div>
+                </td>
+            {% endfor %}
+                </tr>
+
+            </tbody>
+       </table>
+ <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">简历:</h4>
+      </div>
+      <div class="modal-body">
+          <div style="height: 450px"> 
+              <iframe class='frame_style' src='/static/pdfjs/web/viewer.html?file=/static/doc/1481953691.pdf'>
+            </iframe>
+            </div>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+        {{ render_pagination(pagination,'company.resume_pending') }}
+        {% endblock %}
+</div>
+
+{%endblock %}
+
+{% block tail_js %}
+      <script src="http://labfile.oss.aliyuncs.com/courses/923/week7/code/jquery/3.2.1/jquery.min.js"></script>
+      <script src="http://labfile.oss.aliyuncs.com/courses/923/week7/code/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+{{ super() }}
+    <script>
+            /*
+$('#exampleModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text('的简历:')
+});*/
+    </script>
+    <script>
+var active=$('.list-group').eq(1).children('.active').attr("id") 
+$('#exampleModal').on('show.bs.modal', function(event){
+  var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever');
+   //$('.modal-body').children('iframe').load("http://127.0.0.1:5000/static/pdfjs/web/viewer.html?file=/static/doc/1481953691.pdf");
+    //$('#pdf').attr('src',)
+  var tdButton = button.parent().siblings().last().find('button');
+  var id = button.parent().siblings().first();
+    if (tdButton.text()=='待面试'){
+    $('.modal-footer').children().remove();
+    $('.modal-footer').append("<button class='btn btn-success' data-dismiss='modal'>待面试</button>");
+    }else if(tdButton.text()=='已拒绝'){
+    $('.modal-footer').children().remove();
+    $('.modal-footer').append("<button class='btn btn-success' data-dismiss='modal'>已拒绝</button>");
+    }else if(tdButton.text()=='已撤回'){
+    $('.modal-footer').children().remove();
+    $('.modal-footer').append("<button class='btn btn-success' data-dismiss='modal'>已撤回</button>");
+    }else if(tdButton.text()=='已删除'){
+    $('.modal-footer').children().remove();
+    $('.modal-footer').append("<button class='btn btn-success' data-dismiss='modal'>已删除</button>");
+    }else{
+        if(active=='pending_col'){
+        $('.modal-footer').children().remove();
+        $('.modal-footer').append(
+        "<button type='button' class='btn btn-default btn-modal' data-dismiss='modal'>不合适</button><button type='button' class='btn btn-primary btn-modal' data-dismiss='modal'>面试</button>")
+    }else{
+        $('.modal-footer').children().remove();
+        $('.modal-footer').append(
+        "<button type='button' class='btn btn-default btn-modal' data-dismiss='modal'>撤回</button><button type='button' class='btn btn-primary btn-modal' data-dismiss='modal'>删除</button>"
+        );
+    };
+        $('.modal-footer').children().eq(0).bind("click",function(){
+           tdButton.first().trigger("click") 
+        });
+        $('.modal-footer').children().eq(1).bind("click",function(){
+           tdButton.last().trigger("click") 
+        });
+    }
+});
+$(function(){
+$('.btn-operation').click(function(){
+    var id=$(this).parents('tr').children('td:first').text();
+    var btn = $(this);
+    if(btn.text()=='面试'){
+        var nowstate=2;
+        var nt='待面试';
+    }else if(btn.text()=='不合适'){
+        var nowstate=3;
+        var nt='已拒绝'
+    }else if(btn.text()=='撤回'){
+        var nowstate=1;
+        var nt='已撤回'
+    }else if(btn.text()=='删除'){
+        var nowstate=4;
+        var nt='已删除'
+    };
+    $.post('/company/admin/resume_pending',{
+        state:nowstate,
+        jobwanted_id:id
+    },function(data,status){
+        if(status=='success'){
+            btn.addClass('btn-success');
+            btn.text(nt);
+            btn.siblings().remove();
+            btn.prop('disabled',true);
+            if(nowstate==2){
+                $('#pending_num').text(parseInt($('#pending_num').text())-1);
+                $('#interview_num').text(parseInt($('#interview_num').text())+1);
+            }else if(nowstate==3){
+                $('#pending_num').text(parseInt($('#pending_num').text())-1);
+                $('#improper_num').text(parseInt($('#improper_num').text())+1);
+            }else if(nowstate==4 && active=='improper_col'){
+                $('#improper_num').text(parseInt($('#improper_num').text())-1);
+            }else if(nowstate==4 && active=='interview_col'){
+                $('#interview_num').text(parseInt($('#interview_num').text())-1);
+            }else if(nowstate==2 && active=='improper_col'){
+                $('#pending_num').text(parseInt($('#pending_num').text())+1);
+                $('#improper_num').text(parseInt($('#improper_num').text())-1);
+            }else if(nowstate==2 && active=='interview_col'){
+                $('#pending_num').text(parseInt($('#pending_num').text())+1);
+                $('#interview_num').text(parseInt($('#interview_num').text())-1);
+            };
+        }else{
+            alert('操作失败,稍后再试')
+        };
+    });
+    //a标签下这个并不起作用,同样的e.preventDefault()
+    //return false;
+})
+});
+//jquery post后把data挡住了,flask无法渲染
+/*
+$(function(){
+    $('.list-group').eq(1).children().click(function(){
+         if($(this).attr('id')=='pending_col'){
+                var poststate=1
+                $('td').find('.btn-operation').remove()
+                #$('td').children('.btn-group').
+            }else if($(this).attr('id')=='interview_col'){
+                var poststate=2
+            }else if($(this).attr('id')=='improper_col'){
+                var poststate=3
+            }
+            $(this).siblings('.active').attr('class','list-group-item');
+            $(this).attr('class','list-group-item active');
+            
+    })
+})
+*/
+    </script>
+    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.0.201604172/pdfobject.min.js"></script-->
+{% endblock%}
