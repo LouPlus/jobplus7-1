@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, TextAreaField, IntegerField
-from wtforms.validators import Length, Email,EqualTo, Required, URL, NumberRange
-from jobplus.models import db, User
+from wtforms.validators import Length, Email,EqualTo, Required, URL, NumberRange, Optional, URL, AnyOf
+from jobplus.models import db, User, Company, Personal
 
 
 class LoginForm(FlaskForm):
@@ -71,7 +71,66 @@ class PersonalForm(FlaskForm):
         db.session.commit()
 
 
+class JobForm(FlaskForm):
+
+    name = StringField('职位名称', validators=[Required(), Length(1,10)])
+    min_pay = IntegerField('最低薪酬', validators=[Required(),Length(0,8)])
+    max_pay = IntegerField('最高薪酬', validators=[Required(),Length(0,8)])
+    address = StringField('工作地点',validators=[Length(0,49)])
+    label = StringField('标签',validators=[Length(0,4)])
+    jobyear = IntegerField('工作年限', validators=[Required(),NumberRange(0,100)])
+    education = StringField('学历要求', validators=[Required()])
+    description = TextAreaField('职位描述',validators=[Required()])
+    submit = SubmitField('提交')
+
+    def validate_max_pay(self,filed):
+        if field.data < self.min_pay:
+            raise ValidationError('最高薪酬不小于最低薪酬')
+
+    def create_job(self,job):
+        db.session.add(job)
+        db.session.commit()
 
 
+#公司表单类
+class CompanyForm(FlaskForm):
+    # 公司名称创建时需要验证
+    name = StringField('公司名称', validators=[Required(), Length(1,30)])
+    address = StringField('地址', validators=[Required(), Length(1,49)])
+    url = StringField('官网(可选)', validators=[Optional(), URL(), Length(1,64)])
+    phone = StringField('电话', validators=[Required(),Length(8,11)])
+    logo = FileField('logo(可选)',validators=[
+        Optional(),
+        FileRequired(),
+        FileAllowed(['png'],'png only')]
+        )
+    summary = StringField('简介', validators=[Required(), Length(5,30)])
+    field = StringField('领域', validators=[Required(), Length(2,10)])
+    financing = StringField('融资情况(可选)', validators=[Optional(),AnyOf(('A轮','B轮','C轮','天使轮'))])
+    submit =SubmitField('提交')
+
+    def validate_phone(self,field):
+        if not field.data.isdigit():
+            raise ValidationError('只由数字组成')
+    def create_company(self, company):
+        db.session.add(company)
+        db.session.commit()
+
+
+# 管理员编辑用户表单
+class UsereditForm(FlaskForm):
+    name = StringField('真实名', validators=[Required(), Length(1, 5)])
+    email = StringField('邮箱', validators=[Required(), Email()])
+    password = PasswordField('密码(不填不改变)', validators=[Optional(), Length(6,12)])
+    phone = StringField('手机号', validators=[Required(), Length(11,12)])
+
+#管理员修改公司表单类
+class CompanyeditForm(FlaskForm):
+    email = StringField('邮箱', validators=[Required(), Email()])
+    password = PasswordField('密码(不填不改变)', validators=[Optional(), Length(6,12)])
+    # 公司名称创建时需要验证
+    name = StringField('公司名称', validators=[Required(), Length(1,30)])
+    url = StringField('官网(可选)', validators=[Optional(), URL(), Length(1,64)])
+    summary = StringField('简介', validators=[Required(), Length(5,30)])
 
 

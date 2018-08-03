@@ -1,0 +1,5 @@
+{extends '/admin/admin_users.html'}
+{% from 'macros.html' import render_form}
+{% block admin}
+{{ render_form(form, url_for('admin.users_edit')) }}
+{% endblock %}

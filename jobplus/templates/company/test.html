@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from 'macros.html' import render_form %}
 {% block head_css %}
     {{ super() }}
     <style>
@@ -38,7 +39,11 @@
 {% endblock %}
 {% block tail_js %}
 {{ super() }}
+<script>
     <script>
+    $('button').click(function(){
+    $.post('/company/test')
+    })
 $('#exampleModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var recipient = button.data('whatever') // Extract info from data-* attributes
@@ -46,9 +51,10 @@ $('#exampleModal').on('show.bs.modal', function (event) {
   // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
   var modal = $(this)
   modal.find('.modal-title').text('New message to ' + recipient)
-  modal.find('.modal-body input').val(recipient)
+  $('.row').append('{{render_form(form=form,'company.test')}}')
 })
     </script>
+    /*
     <script>
     $(document).ready(function(){
     $('.btn').click(function(){
@@ -67,4 +73,5 @@ $('#exampleModal').on('show.bs.modal', function (event) {
     })
     })
     </script>
+    */
 {% endblock%}

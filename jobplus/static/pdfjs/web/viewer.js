@@ -25,7 +25,7 @@
 
 'use strict';
 
-var DEFAULT_URL = '';
+var DEFAULT_URL = 'link.pdf';
 var DEFAULT_SCALE_DELTA = 1.1;
 var MIN_SCALE = 0.25;
 var MAX_SCALE = 10.0;

@@ -61,7 +61,8 @@ def iter_job():
                     address=f.address(),
                     label=f.random_element(elements=('互联网','销售','管理')),
                     jobyear=f.random_int(0,100),
-                    education=f.random_element(elements=('无限制','专科','本科','博士'))
+                    education=f.random_element(elements=('无限制','专科','本科','博士')),
+                    state=f.random_element(elements=(1,2,3)),
                     )
 
 # 生成投递表

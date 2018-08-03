@@ -22,8 +22,6 @@ def index():
             per_page=current_app.config['ADMIN_PER_PAGE'],
             error_out=False
             )
-    print(person)
-    print(pagination.items)
     return render_template('user/index.html',pagination=pagination)
 
 
