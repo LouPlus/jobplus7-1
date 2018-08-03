@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, request, current_app, request
-from jobplus.models import Company, User, Job, JobWanted, db
+from flask import Blueprint, render_template, request, current_app, request, flash
+from jobplus.models import Company, User, Job, JobWanted, db, Personal
 from jobplus.decorators import admin_required
 from flask_login import current_user
-from jobplus.forms import CompanyeditForm
+from jobplus.forms import CompanyeditForm, UsereditForm
 
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
@@ -12,15 +12,14 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 def users():
     if request.method == 'POST':
         try:
-            id = request.args.get('id',type=int)
-            state = request.args.get('state',type=int)
+            id = request.form.get('id',type=int)
+            state = request.form.get('state',type=int)
             if not id or not state:
                 raise ValueError
             user = User.query.get_or_404(id)
             user.state = state
             db.session.add(user)
-            db.commit()
-            flash('状态修改成功', 'success')
+            db.session.commit()
             return 'success'
         except ValueError:
             pass
@@ -115,15 +114,14 @@ def company_add():
 def jobs():
     if request.method == 'POST':
         try:
-            id = request.args.get('id',type=int)
-            state = request.args.get('state',type=int)
+            id = request.form.get('id',type=int)
+            state = request.form.get('state',type=int)
             if not id or not state:
                 raise ValueError
             job = Job.query.get_or_404(id)
             job.state = state
             db.session.add(job)
-            db.commit()
-            flash('状态修改成功', 'success')
+            db.session.commit()
             return 'success'
         except ValueError:
             pass

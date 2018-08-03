@@ -123,6 +123,7 @@ class UsereditForm(FlaskForm):
     email = StringField('邮箱', validators=[Required(), Email()])
     password = PasswordField('密码(不填不改变)', validators=[Optional(), Length(6,12)])
     phone = StringField('手机号', validators=[Required(), Length(11,12)])
+    submit = SubmitField('提交')
 
 #管理员修改公司表单类
 class CompanyeditForm(FlaskForm):
@@ -132,5 +133,6 @@ class CompanyeditForm(FlaskForm):
     name = StringField('公司名称', validators=[Required(), Length(1,30)])
     url = StringField('官网(可选)', validators=[Optional(), URL(), Length(1,64)])
     summary = StringField('简介', validators=[Required(), Length(5,30)])
+    submit = SubmitField('提交')
 
 

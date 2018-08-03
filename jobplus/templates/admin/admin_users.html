@@ -4,19 +4,15 @@
 {% block title %}
 管理-用户
 {% endblock %}
-{% block opreation %}
-<div class='btn-group'>
-    <a href='' class='btn btn-primary'>
+{% block operation %}
+    <a href='{{ url_for('admin.users_edit') }}' class='btn btn-primary'>
         <span class='glyphicon glyphicon-plus'></span>
            添加用户
     </a>
-    <a href='' class='btn btn-primary'>
+    <a href='{{ url_for('admin.company_add') }}' class='btn btn-primary'>
         <span class='glyphicon glyphicon-plus'></span>
            添加企业
     </a>
-</div>
-div class='list-group'>
-</div>
 {% endblock %}
 
 {% block admin %}
@@ -67,13 +63,13 @@ div class='list-group'>
                 <div class='btn-group'>
                     {% if user.role == 10%}
                     <a href='{{ url_for('admin.users_edit', id=user.id) }}' class='btn btn-default'>编辑</a>
-                    {%else%}
+                    {%elif user.role == 20 %}
                     <a href='{{ url_for('admin.company_edit', id=user.id) }}' class='btn btn-default'>编辑</a>
                     {%endif%}
                     {% if user.state == user.USER_DISABLE %}
-                    <button id='state_change' class='btn btn-default'>启用</button>
+                    <button  class='btn btn-default state'>启用</button>
                     {%else%}
-                    <button id='state_change' class='btn btn-default'>禁用</button>
+                    <button  class='btn btn-default state'>禁用</button>
                     {%endif%}
                 </div>
             </td>
@@ -85,14 +81,11 @@ div class='list-group'>
 {% endblock %}
  
 {% block tail_js %}
-      <script src="http://labfile.oss.aliyuncs.com/courses/923/week7/code/jquery/3.2.1/jquery.min.js"></script>
-      <script src="http://labfile.oss.aliyuncs.com/courses/923/week7/code/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script>
-$(function(){$('#state_change').click(function(){
-                alert('ha')})})
-/*
-        $('#state_change').click(function(){
-            var id=$(this).parents('td').siblings().eq(0).value()
+
+        $('.state').click(function(){
+            var id=parseInt($(this).parents('td').siblings().eq(0).text());
+            var button=$(this);
             if($(this).text()=='启用'){
                 var nextstate=2;
                 var nexttext='禁用';
@@ -101,17 +94,16 @@ $(function(){$('#state_change').click(function(){
                 var nexttext='启用';
             }
             $.post('/admin/users',{
-                state:nextstate;
-                id:id;
+                state:nextstate,
+                id:id
             },function(data, status){
                 if(status=='success'){
-                $('#state_change').text(nexttext)
+                button.text(nexttext)
                 }else{
                     alert('操作失败')
                 }
             })
         })
-        */
     </script>
 {% endblock %}
 

@@ -1,5 +1,5 @@
 {% extends 'admin/admin_base.html' %}
-{% from 'macros.html' import render_form}
+{% from 'macros.html' import render_form, render_pagination %}
 
 {% block title %}
 管理-职位
@@ -22,27 +22,31 @@
             <!--可以合在一起判断-->
             <td>{{ job.id }}</td>
             <td>{{ job.name }}</td>
-            <td>{{ user.company.name }}</td>
+            <td>{{ job.company.name }}</td>
+            <td>{{ job.created_at}}</td>
             <td>
             {% if job.state == job.JOB_ON %}
-                <button id='change_state' class='btn btn-default'>下线</button>
+                <button  class='btn btn-default state'>下线</button>
                 {%elif job.state == job.JOB_OFF%}
-                <button id='change_state' class='btn btn-default'>上线</button>
+                <button  class='btn btn-default state'>上线</button>
                 {% else %}
-                <button  class='btn btn-default disable'>删除</button>
+                <button  class='btn btn-default' disabled='true'>删除</button>
                 {% endif %}
             </td>
                 </div>
             </td>
         </tr>
+        {% endfor %}
     </tbody>
 </table>
+{{ render_pagination(pagination,'admin.jobs')}}
 {% endblock %}
  
 {% block tail_js %}
     <script>
-        $('#change_state').click(function(){
-            var id=$(this).parents('td').siblings().eq(0).value()
+        $('.state').click(function(){
+            var id=parseInt($(this).parent('td').siblings().eq(0).text());
+            var button = $(this);
             if($(this).text()=='上线'){
                 var nextstate=1;
                 var nexttext='下线';
@@ -51,11 +55,11 @@
                 var nexttext='上线';
             }
             $.post('/admin/jobs',{
-                state:nextstate;
-                id:id;
+                state:nextstate,
+                id:id
             },function(data, status){
                 if(status=='success'){
-                $('#change_state').text(nexttext)
+                button.text(nexttext)
                 }else{
                     alert('操作失败')
                 }
